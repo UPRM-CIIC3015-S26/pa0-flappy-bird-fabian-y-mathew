@@ -8,7 +8,7 @@ fewer than five lines of new code. It is recommended that you read through the c
 some of the game mechanics.
 '''
 # Setup the screen -->
-screen = pygame.display.set_mode((400, 600))
+screen = pygame.display.set_mode((620, 700))
 pygame.display.set_caption("Flappy Bird")
 
 # Colors -->
@@ -38,8 +38,8 @@ bird_y = 300
 bird_velocity = 0
 # TODO 1: Tweaking the physics
 # Looks like the player is falling too quickly not giving a change to flap it's wing, maybe tweak around with the value of this variable
-gravity = 9.81
-jump = -10
+gravity = 0.20
+jump = -6.5
 # Pipe Variables -->
 pipe_x = 400
 pipe_width = 70
