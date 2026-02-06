@@ -8,7 +8,7 @@ fewer than five lines of new code. It is recommended that you read through the c
 some of the game mechanics.
 '''
 # Setup the screen -->
-screen = pygame.display.set_mode((620, 700))
+screen = pygame.display.set_mode((400, 600))
 pygame.display.set_caption("Flappy Bird")
 
 # Colors -->
@@ -16,7 +16,8 @@ pygame.display.set_caption("Flappy Bird")
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 BLACK = (0, 0, 0)
-PLAYER = (255, 255, 255)
+PLAYER = (247, 255 ,0)
+CELESTE = (207, 122, 233)
 
 # Font Size -->
 big_font = pygame.font.SysFont(None, 80)
@@ -38,20 +39,20 @@ bird_y = 300
 bird_velocity = 0
 # TODO 1: Tweaking the physics
 # Looks like the player is falling too quickly not giving a change to flap it's wing, maybe tweak around with the value of this variable
-gravity = 0.20
-jump = -6.5
+gravity = 0.6
+jump = -10
 # Pipe Variables -->
 pipe_x = 400
 pipe_width = 70
 # TODO 2.1: A Little gap Problem
 # You probably noticed when running the code that it's impossible the player to go through the gaps
 # play around with the pipe_gap variable so that its big enough for the player to pass through
-pipe_gap = 170
+pipe_gap = 150
 pipe_height = random.randint(100, 400)
 # TODO 2.2: The too fast problem
 # The pipes are moving way too fast! Play around with the pipe_speed variable until you find a good
 # speed for the player to play in!
-pipe_speed = 20
+pipe_speed = 5
 
 score = 0
 game_over = False
@@ -63,7 +64,7 @@ running = True
 while running:
     # TODO 6: Changing the name!
     # D'oh! This is not yout name isn't follow the detailed instructions on the PDF to complete this task.
-    name = "Homer Simpson"
+    name = "Mathew"
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -79,6 +80,7 @@ while running:
                     # After the bird crashes with a pipe the when spawning back the player it doesn't appear.
                     # It is your job to find why this is happening! (Hint: What variable stores the y coordinates
                     # of the bird)
+                    bird_y = 300
                     bird_velocity = 0
                     pipe_x = 400
                     score = 0
@@ -97,7 +99,7 @@ while running:
             # TODO 4: Fixing the scoring
             # When you pass through the pipes the score should be updated to the current score + 1. Implement the
             # logic to accomplish this scoring system.
-            score = 1
+            score += 1
 
         if bird_y > 600 or bird_y < 0:
             game_over = True
@@ -120,7 +122,7 @@ while running:
     screen.blit(score_text, (score_x, score_y))
 
     if game_started == False: # Start UI -->
-        title_text = big_font.render("Flappy Bird", True, WHITE)
+        title_text = big_font.render("Flappy Bird", True, CELESTE)
         instruction_text = small_font.render("Press space bar to flap!", True, WHITE)
         screen.blit(title_text, (title_x, title_y))
         screen.blit(instruction_text, (instruction_x, instruction_y))
