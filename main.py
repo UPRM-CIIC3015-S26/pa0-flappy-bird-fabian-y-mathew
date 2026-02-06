@@ -14,9 +14,9 @@ pygame.display.set_caption("Flappy Bird")
 # Colors -->
 # NOTE: This is in the RGB (Red, Green, Blue) format
 WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
+GREEN = (30, 159, 24)
 BLACK = (0, 0, 0)
-PLAYER = (247, 255 ,0)
+PLAYER = (218, 218 , 33)
 CELESTE = (207, 122, 233)
 
 # Font Size -->
@@ -39,20 +39,25 @@ bird_y = 300
 bird_velocity = 0
 # TODO 1: Tweaking the physics
 # Looks like the player is falling too quickly not giving a change to flap it's wing, maybe tweak around with the value of this variable
-gravity = 0.6
-jump = -10
+gravity = 0.5
+jump = -8
 # Pipe Variables -->
 pipe_x = 400
-pipe_width = 70
+pipe_width = 80
+pipe_x2 = pipe_x + 250
+pipe_width2 = 80
+
 # TODO 2.1: A Little gap Problem
 # You probably noticed when running the code that it's impossible the player to go through the gaps
 # play around with the pipe_gap variable so that its big enough for the player to pass through
 pipe_gap = 150
 pipe_height = random.randint(100, 400)
+pipe_height2 = random.randint(100, 400)
+
 # TODO 2.2: The too fast problem
 # The pipes are moving way too fast! Play around with the pipe_speed variable until you find a good
 # speed for the player to play in!
-pipe_speed = 5
+pipe_speed = 3.5
 
 score = 0
 game_over = False
@@ -83,19 +88,26 @@ while running:
                     bird_y = 300
                     bird_velocity = 0
                     pipe_x = 400
+                    pipe_x2 = pipe_x + 250
                     score = 0
                     game_over = False
                     game_started = True
                     pipe_height = random.randint(100, 400)
+                    pipe_height2 = random.randint(100, 400)
 
     if game_started == True and game_over == False:
         bird_velocity = bird_velocity + gravity
         bird_y = bird_y + bird_velocity
         pipe_x = pipe_x - pipe_speed
+        pipe_x2 = pipe_x2 - pipe_speed
 
-        if pipe_x < -70:
+        if pipe_x < -80:
             pipe_x = 400
             pipe_height = random.randint(100, 400)
+            score += 1
+        if pipe_x2 < -80:
+            pipe_x2 = pipe_x + 250
+            pipe_height2 = random.randint(100, 400)
             # TODO 4: Fixing the scoring
             # When you pass through the pipes the score should be updated to the current score + 1. Implement the
             # logic to accomplish this scoring system.
@@ -107,17 +119,23 @@ while running:
         bird_rect = pygame.Rect(bird_x, bird_y, 30, 30)
         top_pipe_rect = pygame.Rect(pipe_x, 0, pipe_width, pipe_height)
         bottom_pipe_rect = pygame.Rect(pipe_x, pipe_height + pipe_gap, pipe_width, 600)
+        top_pipe_rect2 = pygame.Rect(pipe_x2, 0, pipe_width, pipe_height2)
+        bottom_pipe_rect2 = pygame.Rect(pipe_x2, pipe_height2 + pipe_gap, pipe_width, 600)
 
         if bird_rect.colliderect(top_pipe_rect) or bird_rect.colliderect(bottom_pipe_rect):
             game_over = True
+        if bird_rect.colliderect(top_pipe_rect2) or bird_rect.colliderect(bottom_pipe_rect2):
+            game_over = True
 
-    screen.fill(pygame.Color('grey12'))
+    screen.fill(pygame.Color('lightskyblue'))
     # TODO 5: A Bird's Color
     # The color of the player is currently white, let's change that a bit! You are free to change the bird's
     # to whatever you wish. You will need to head back to where the PLAYER variable was created and change the values.
     pygame.draw.rect(screen, PLAYER, (bird_x, bird_y, 30, 30)) # Drawing the bird (You don't need to touch this line!)
     pygame.draw.rect(screen, GREEN, (pipe_x, 0, pipe_width, pipe_height))
     pygame.draw.rect(screen, GREEN, (pipe_x, pipe_height + pipe_gap, pipe_width, 600))
+    pygame.draw.rect(screen, GREEN, (pipe_x2, 0, pipe_width, pipe_height2))
+    pygame.draw.rect(screen, GREEN, (pipe_x2, pipe_height2 + pipe_gap, pipe_width, 600))
     score_text = small_font.render(str(score), True, WHITE)
     screen.blit(score_text, (score_x, score_y))
 
