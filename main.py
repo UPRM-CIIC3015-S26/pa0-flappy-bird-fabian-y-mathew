@@ -51,8 +51,10 @@ pipe_width2 = 80
 # You probably noticed when running the code that it's impossible the player to go through the gaps
 # play around with the pipe_gap variable so that its big enough for the player to pass through
 pipe_gap = 150
-pipe_height = random.randint(100, 400)
-pipe_height2 = random.randint(100, 400)
+
+
+pipe_height = 200
+pipe_height2 = 200
 
 # TODO 2.2: The too fast problem
 # The pipes are moving way too fast! Play around with the pipe_speed variable until you find a good
@@ -68,8 +70,28 @@ clock = pygame.time.Clock()
 bg = pygame.image.load("img/Fondo.png").convert()
 bg = pygame.transform.scale(bg, (400, 690))
 
-# --- ADDED: Logical ground line (adjust 520 up/down if you want) ---
+
 GROUND_Y = 520
+HITBOX_W = 30
+HITBOX_H = 30
+
+
+pipe_height = random.randint(100, GROUND_Y - pipe_gap - 100)
+pipe_height2 = random.randint(100, GROUND_Y - pipe_gap - 100)
+
+class Bird (pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("img/Bird.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (70, 70))
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+
+bird_group = pygame.sprite.Group()
+flappy = Bird(100, int(screen.get_height()/2))
+bird_group.add(flappy)
+
+
 
 running = True
 while running:
@@ -99,34 +121,49 @@ while running:
                     score = 0
                     game_over = False
                     game_started = True
-                    pipe_height = random.randint(100, 400)
-                    pipe_height2 = random.randint(100, 400)
+
+
+                    pipe_height = random.randint(100, GROUND_Y - pipe_gap - 100)
+                    pipe_height2 = random.randint(100, GROUND_Y - pipe_gap - 100)
+
     if game_started == True and game_over == False:
         bird_velocity = bird_velocity + gravity
         bird_y = bird_y + bird_velocity
+
+
+        flappy.rect.topleft = (bird_x, bird_y)
+
         pipe_x = pipe_x - pipe_speed
         pipe_x2 = pipe_x2 - pipe_speed
 
         if pipe_x < -80:
             pipe_x = 400
-            pipe_height = random.randint(100, 400)
+
+
+            pipe_height = random.randint(100, GROUND_Y - pipe_gap - 100)
+
             score += 1
         if pipe_x2 < -80:
             pipe_x2 = pipe_x + 250
-            pipe_height2 = random.randint(100, 400)
+
+
+            pipe_height2 = random.randint(100, GROUND_Y - pipe_gap - 100)
+
             # TODO 4: Fixing the scoring
             # When you pass through the pipes the score should be updated to the current score + 1. Implement the
             # logic to accomplish this scoring system.
             score += 1
 
-        # --- CHANGED: Kill when touching the logical ground line ---
-        if bird_y + 30 >= GROUND_Y or bird_y < 0:
+
+        bird_rect = pygame.Rect(0, 0, HITBOX_W, HITBOX_H)
+        bird_rect.center = flappy.rect.center
+
+        if bird_rect.bottom >= GROUND_Y or bird_rect.top < 0:
             game_over = True
 
-        bird_rect = pygame.Rect(bird_x, bird_y, 30, 30)
         top_pipe_rect = pygame.Rect(pipe_x, 0, pipe_width, pipe_height)
 
-        # --- CHANGED: Bottom pipes end at GROUND_Y, not 600 ---
+
         bottom_pipe_rect = pygame.Rect(
             pipe_x,
             pipe_height + pipe_gap,
@@ -136,7 +173,7 @@ while running:
 
         top_pipe_rect2 = pygame.Rect(pipe_x2, 0, pipe_width, pipe_height2)
 
-        # --- CHANGED: Bottom pipes end at GROUND_Y, not 600 ---
+
         bottom_pipe_rect2 = pygame.Rect(
             pipe_x2,
             pipe_height2 + pipe_gap,
@@ -149,11 +186,11 @@ while running:
         if bird_rect.colliderect(top_pipe_rect2) or bird_rect.colliderect(bottom_pipe_rect2):
             game_over = True
 
-
+    bird_group.draw(screen)
     # TODO 5: A Bird's Color
     # The color of the player is currently white, let's change that a bit! You are free to change the bird's
     # to whatever you wish. You will need to head back to where the PLAYER variable was created and change the values.
-    pygame.draw.rect(screen, PLAYER, (bird_x, bird_y, 30, 30)) # Drawing the bird (You don't need to touch this line!)
+    #pygame.draw.rect(screen, PLAYER, (bird_x, bird_y, 30, 30)) # Drawing the bird (You don't need to touch this line!)
     pygame.draw.rect(screen, GREEN, (pipe_x, 0, pipe_width, pipe_height))
     pygame.draw.rect(screen, GREEN, (pipe_x, pipe_height + pipe_gap, pipe_width, 600))
     pygame.draw.rect(screen, GREEN, (pipe_x2, 0, pipe_width, pipe_height2))
