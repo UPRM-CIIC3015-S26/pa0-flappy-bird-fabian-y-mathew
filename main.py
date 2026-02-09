@@ -199,7 +199,7 @@ while running:
     screen.blit(score_text, (score_x, score_y))
 
     if game_started == False: # Start UI -->
-        title_text = big_font.render("Flappy Bird", True, CELESTE)
+        title_text = big_font.render("Flappy Bird", True, WHITE)
         instruction_text = small_font.render("Press space bar to flap!", True, WHITE)
         screen.blit(title_text, (title_x, title_y))
         screen.blit(instruction_text, (instruction_x, instruction_y))
