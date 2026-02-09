@@ -65,8 +65,11 @@ game_started = False
 
 clock = pygame.time.Clock()
 
-bg = pygame.image.load("img/Fondo.jpg").convert()
-bg = pygame.transform.scale(bg, (620, 700))
+bg = pygame.image.load("img/Fondo.png").convert()
+bg = pygame.transform.scale(bg, (400, 690))
+
+# --- ADDED: Logical ground line (adjust 520 up/down if you want) ---
+GROUND_Y = 520
 
 running = True
 while running:
@@ -98,7 +101,6 @@ while running:
                     game_started = True
                     pipe_height = random.randint(100, 400)
                     pipe_height2 = random.randint(100, 400)
-
     if game_started == True and game_over == False:
         bird_velocity = bird_velocity + gravity
         bird_y = bird_y + bird_velocity
@@ -117,14 +119,30 @@ while running:
             # logic to accomplish this scoring system.
             score += 1
 
-        if bird_y > 600 or bird_y < 0:
+        # --- CHANGED: Kill when touching the logical ground line ---
+        if bird_y + 30 >= GROUND_Y or bird_y < 0:
             game_over = True
 
         bird_rect = pygame.Rect(bird_x, bird_y, 30, 30)
         top_pipe_rect = pygame.Rect(pipe_x, 0, pipe_width, pipe_height)
-        bottom_pipe_rect = pygame.Rect(pipe_x, pipe_height + pipe_gap, pipe_width, 600)
+
+        # --- CHANGED: Bottom pipes end at GROUND_Y, not 600 ---
+        bottom_pipe_rect = pygame.Rect(
+            pipe_x,
+            pipe_height + pipe_gap,
+            pipe_width,
+            GROUND_Y - (pipe_height + pipe_gap)
+        )
+
         top_pipe_rect2 = pygame.Rect(pipe_x2, 0, pipe_width, pipe_height2)
-        bottom_pipe_rect2 = pygame.Rect(pipe_x2, pipe_height2 + pipe_gap, pipe_width, 600)
+
+        # --- CHANGED: Bottom pipes end at GROUND_Y, not 600 ---
+        bottom_pipe_rect2 = pygame.Rect(
+            pipe_x2,
+            pipe_height2 + pipe_gap,
+            pipe_width,
+            GROUND_Y - (pipe_height2 + pipe_gap)
+        )
 
         if bird_rect.colliderect(top_pipe_rect) or bird_rect.colliderect(bottom_pipe_rect):
             game_over = True
