@@ -66,6 +66,7 @@ pipe_height2 = 200
 pipe_speed = 3.5
 
 score = 0
+high_score = 0
 game_over = False
 game_started = False
 
@@ -192,9 +193,15 @@ while running:
         )
 
         if bird_rect.colliderect(top_pipe_rect) or bird_rect.colliderect(bottom_pipe_rect):
-            game_over = True
+            if game_over == False:
+                game_over = True
+                if score > high_score:
+                    high_score = score
         if bird_rect.colliderect(top_pipe_rect2) or bird_rect.colliderect(bottom_pipe_rect2):
-            game_over = True
+            if game_over == False:
+                game_over = True
+                if score > high_score:
+                    high_score = score
 
     if game_over and death_played == False:
         death_sound.play()
@@ -215,10 +222,24 @@ while running:
         screen.blit(instruction_text, (instruction_x, instruction_y))
 
     if game_over: # GameOver UI -->
-        loss_text = small_font.render("Press Space to restart...", True, WHITE)
-        screen.blit(loss_text, (85, 200))
+        game_over_box = pygame.Rect(50, 200, 300, 150)
+        pygame.draw.rect(screen, "seagreen3", game_over_box, border_radius=20)
+        pygame.draw.rect(screen, "seagreen4", game_over_box, 2, border_radius=20)
+
+        score_label = small_font.render("Score:", True, BLACK)
+        score_value = small_font.render(str(score), True, WHITE)
+        high_score_label = small_font.render("High Score:", True, BLACK)
+        high_score_value = small_font.render(str(high_score), True, WHITE)
+
+        screen.blit(score_label, (90, 220))
+        screen.blit(score_value, (225, 220))
+        screen.blit(high_score_label, (90, 260))
+        screen.blit(high_score_value, (225, 260))
+
+        restart_text = small_font.render("Press space to restart!", True, WHITE)
+        screen.blit(restart_text, (90, 310))
 
     pygame.display.update()
     clock.tick(60)
-
+-4
 pygame.quit()
