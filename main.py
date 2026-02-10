@@ -1,6 +1,8 @@
 import pygame, random
 pygame.mixer.init()
 point_sound = pygame.mixer.Sound('sound/Point.wav')
+death_sound = pygame.mixer.Sound('sound/muerte.wav')
+fly_sound = pygame.mixer.Sound('sound/fly.wav')
 pygame.init()
 '''
 Welcome to PA0 – Flappy Bird! Throughout this code, you are going to find a recreation of a game you have probably
@@ -82,6 +84,7 @@ pipe_height2 = random.randint(100, GROUND_Y - pipe_gap - 100)
 
 scored_pipe1 = False
 scored_pipe2 = False
+death_played = False
 
 class Bird (pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -111,8 +114,10 @@ while running:
                 if game_started == False:
                     game_started = True
                     bird_velocity = jump
+                    fly_sound.play()
                 elif game_over == False:
                     bird_velocity = jump
+                    fly_sound.play()
                 else:
                     # TODO 3: Spawning back the Player
                     # After the bird crashes with a pipe the when spawning back the player it doesn't appear.
@@ -131,6 +136,7 @@ while running:
 
                     scored_pipe1 = False
                     scored_pipe2 = False
+                    death_played = False
 
     if game_started == True and game_over == False:
         bird_velocity = bird_velocity + gravity
@@ -190,11 +196,11 @@ while running:
         if bird_rect.colliderect(top_pipe_rect2) or bird_rect.colliderect(bottom_pipe_rect2):
             game_over = True
 
+    if game_over and death_played == False:
+        death_sound.play()
+        death_played = True
+
     bird_group.draw(screen)
-    # TODO 5: A Bird's Color
-    # The color of the player is currently white, let's change that a bit! You are free to change the bird's
-    # to whatever you wish. You will need to head back to where the PLAYER variable was created and change the values.
-    #pygame.draw.rect(screen, PLAYER, (bird_x, bird_y, 30, 30)) # Drawing the bird (You don't need to touch this line!)
     pygame.draw.rect(screen, GREEN, (pipe_x, 0, pipe_width, pipe_height))
     pygame.draw.rect(screen, GREEN, (pipe_x, pipe_height + pipe_gap, pipe_width, 600))
     pygame.draw.rect(screen, GREEN, (pipe_x2, 0, pipe_width, pipe_height2))
