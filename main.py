@@ -63,7 +63,7 @@ pipe_height2 = 200
 # TODO 2.2: The too fast problem
 # The pipes are moving way too fast! Play around with the pipe_speed variable until you find a good
 # speed for the player to play in!
-pipe_speed = 3.5
+pipe_speed = 35
 
 score = 0
 game_over = False
@@ -105,7 +105,7 @@ while running:
     screen.blit(bg, (0, 0))
     # TODO 6: Changing the name!
     # D'oh! This is not yout name isn't follow the detailed instructions on the PDF to complete this task.
-    name = "Mathew"
+    name = "Fabian"
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False

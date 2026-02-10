@@ -14,16 +14,16 @@ The project is designed as an introductory programming assignment (PA0). Most of
 ## 👥 Team Information
 
 ### Partner #1
-- **Name:**
-- **Student Number:**
-- **Email:**
+- **Name:** Mathew Rivera Ortiz     
+- **Student Number:** 802259750
+- **Email:**mathew.rivera1@upr.edu
 
 ### Partner #2
-- **Name:**
-- **Student Number:**
-- **Email:**
+- **Name:** Fabian Andre Ortiz Feliberty
+- **Student Number:** 802254725
+- **Email:** fabian.ortiz11@upr.edu
 
 ## ⭐ Bonus Features (Optional)
 List and briefly describe any additional features or enhancements implemented beyond the basic requirements.
-- Bonus Feature 1
-- Bonus Feature 2
+- Different sound effects were added for flying, scoring points, and player death.
+- The player player was changed florm a simple square to a bird sprite. 
