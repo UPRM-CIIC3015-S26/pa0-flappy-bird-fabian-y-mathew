@@ -1,4 +1,5 @@
 import pygame, random
+#inicio y sonidos
 pygame.mixer.init()
 point_sound = pygame.mixer.Sound('sound/Point.wav')
 death_sound = pygame.mixer.Sound('sound/muerte.wav')
@@ -48,7 +49,7 @@ jump = -8
 # Pipe Variables -->
 pipe_x = 400
 pipe_width = 80
-pipe_x2 = pipe_x + 250
+pipe_x2 = pipe_x + 250 #this makes the 2nd pipe appear with the proper space
 pipe_width2 = 80
 
 # TODO 2.1: A Little gap Problem
@@ -86,7 +87,7 @@ pipe_height2 = random.randint(100, GROUND_Y - pipe_gap - 100)
 scored_pipe1 = False
 scored_pipe2 = False
 death_played = False
-
+#Bird sprite
 class Bird (pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -182,7 +183,7 @@ while running:
             pipe_width,
             GROUND_Y - (pipe_height + pipe_gap)
         )
-
+#New pipe 2
         top_pipe_rect2 = pygame.Rect(pipe_x2, 0, pipe_width, pipe_height2)
 
         bottom_pipe_rect2 = pygame.Rect(
@@ -191,7 +192,7 @@ while running:
             pipe_width,
             GROUND_Y - (pipe_height2 + pipe_gap)
         )
-
+#Collisions
         if bird_rect.colliderect(top_pipe_rect) or bird_rect.colliderect(bottom_pipe_rect):
             if game_over == False:
                 game_over = True
@@ -206,7 +207,7 @@ while running:
     if game_over and death_played == False:
         death_sound.play()
         death_played = True
-
+#pipes and bird
     bird_group.draw(screen)
     pygame.draw.rect(screen, GREEN, (pipe_x, 0, pipe_width, pipe_height))
     pygame.draw.rect(screen, GREEN, (pipe_x, pipe_height + pipe_gap, pipe_width, 600))
@@ -214,7 +215,7 @@ while running:
     pygame.draw.rect(screen, GREEN, (pipe_x2, pipe_height2 + pipe_gap, pipe_width, 600))
     score_text = small_font.render(str(score), True, WHITE)
     screen.blit(score_text, (score_x, score_y))
-
+#Pantalla de inicio
     if game_started == False: # Start UI -->
         title_text = big_font.render("Flappy Bird", True, WHITE)
         instruction_text = small_font.render("Press space bar to flap!", True, WHITE)
@@ -222,20 +223,22 @@ while running:
         screen.blit(instruction_text, (instruction_x, instruction_y))
 
     if game_over: # GameOver UI -->
+#Game Over Box
         game_over_box = pygame.Rect(50, 200, 300, 150)
         pygame.draw.rect(screen, "seagreen3", game_over_box, border_radius=20)
         pygame.draw.rect(screen, "seagreen4", game_over_box, 2, border_radius=20)
-
+#Text
         score_label = small_font.render("Score:", True, BLACK)
         score_value = small_font.render(str(score), True, WHITE)
         high_score_label = small_font.render("High Score:", True, BLACK)
         high_score_value = small_font.render(str(high_score), True, WHITE)
-
+#Punctuations values
         screen.blit(score_label, (90, 220))
         screen.blit(score_value, (225, 220))
         screen.blit(high_score_label, (90, 260))
         screen.blit(high_score_value, (225, 260))
 
+#Restart instructions
         restart_text = small_font.render("Press Space to restart!", True, WHITE)
         screen.blit(restart_text, (90, 310))
 
