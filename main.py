@@ -1,4 +1,6 @@
 import pygame, random
+pygame.mixer.init()
+point_sound = pygame.mixer.Sound('sound/Point.wav')
 pygame.init()
 '''
 Welcome to PA0 – Flappy Bird! Throughout this code, you are going to find a recreation of a game you have probably
@@ -75,9 +77,11 @@ GROUND_Y = 520
 HITBOX_W = 30
 HITBOX_H = 30
 
-
 pipe_height = random.randint(100, GROUND_Y - pipe_gap - 100)
 pipe_height2 = random.randint(100, GROUND_Y - pipe_gap - 100)
+
+scored_pipe1 = False
+scored_pipe2 = False
 
 class Bird (pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -122,14 +126,15 @@ while running:
                     game_over = False
                     game_started = True
 
-
                     pipe_height = random.randint(100, GROUND_Y - pipe_gap - 100)
                     pipe_height2 = random.randint(100, GROUND_Y - pipe_gap - 100)
+
+                    scored_pipe1 = False
+                    scored_pipe2 = False
 
     if game_started == True and game_over == False:
         bird_velocity = bird_velocity + gravity
         bird_y = bird_y + bird_velocity
-
 
         flappy.rect.topleft = (bird_x, bird_y)
 
@@ -138,22 +143,13 @@ while running:
 
         if pipe_x < -80:
             pipe_x = 400
-
-
             pipe_height = random.randint(100, GROUND_Y - pipe_gap - 100)
+            scored_pipe1 = False
 
-            score += 1
         if pipe_x2 < -80:
             pipe_x2 = pipe_x + 250
-
-
             pipe_height2 = random.randint(100, GROUND_Y - pipe_gap - 100)
-
-            # TODO 4: Fixing the scoring
-            # When you pass through the pipes the score should be updated to the current score + 1. Implement the
-            # logic to accomplish this scoring system.
-            score += 1
-
+            scored_pipe2 = False
 
         bird_rect = pygame.Rect(0, 0, HITBOX_W, HITBOX_H)
         bird_rect.center = flappy.rect.center
@@ -161,8 +157,17 @@ while running:
         if bird_rect.bottom >= GROUND_Y or bird_rect.top < 0:
             game_over = True
 
-        top_pipe_rect = pygame.Rect(pipe_x, 0, pipe_width, pipe_height)
+        if (not scored_pipe1) and (bird_rect.left > pipe_x + pipe_width):
+            score += 1
+            point_sound.play()
+            scored_pipe1 = True
 
+        if (not scored_pipe2) and (bird_rect.left > pipe_x2 + pipe_width2):
+            score += 1
+            point_sound.play()
+            scored_pipe2 = True
+
+        top_pipe_rect = pygame.Rect(pipe_x, 0, pipe_width, pipe_height)
 
         bottom_pipe_rect = pygame.Rect(
             pipe_x,
@@ -172,7 +177,6 @@ while running:
         )
 
         top_pipe_rect2 = pygame.Rect(pipe_x2, 0, pipe_width, pipe_height2)
-
 
         bottom_pipe_rect2 = pygame.Rect(
             pipe_x2,
